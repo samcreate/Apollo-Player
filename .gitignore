@@ -1,0 +1,4 @@
+.sass-cache
+dist
+node_modules
+public/components
