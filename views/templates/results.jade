@@ -1,9 +1,6 @@
 script(type='text/x-handlebars-template', id='result-template')
-  {{#each tracks}}
-  tr
     td.name {{this.name}}
     td.album {{this.album.name}}
     td.artist {{this.artists.0.name}}
     td.add 
-      a.glyphicon.glyphicon-plus-sign.addtrack(data-spotifyuri="{{this.href}}", href="#{{this.href}}")
-  {{/each}}
+      a.glyphicon.glyphicon-plus-sign.addtrack(data-spotifyuri="{{this.uri}}", href="#{{this.uri}}")
