@@ -1,0 +1,9 @@
+script(type='text/x-handlebars-template', id='profile-template')
+    .col-lg-1
+        .avatar
+            a.logout(href="/logout")
+            img.profileimage(src="{{this.profile_image_lg}}")
+    .col-lg-8.col-lg-offset-1.col-xs-push-1
+        .copy.row
+            h1.username {{this.name}}
+
