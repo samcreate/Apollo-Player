@@ -1,0 +1,17 @@
+extends layout
+block content
+	.container.home
+		.row
+			.col-lg-12.copy
+				div
+					h2.rocket.ir Rocket
+					h1 APOLLO PLAYER
+					form(method="get", action="/auth/twitter")#login_form
+						button(type="submit")#login LOGIN WITH TWITTER
+		.row
+			.col-lg-12
+				p APOLLO is an opensource social playlist for Mopidy by ARGONAUT.
+		.album_bg
+		.gradient_cover
+			
+		

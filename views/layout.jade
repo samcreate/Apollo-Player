@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+    link(rel='apple-touch-icon', href='images/touch-icon-iphone.png')
+    link(rel='apple-touch-icon', sizes='76x76', href='images/touch-icon-ipad.png')
+    link(rel='apple-touch-icon', sizes='120x120', href='images/touch-icon-iphone-retina.png')
+    link(rel='apple-touch-icon', sizes='152x152', href='images/touch-icon-ipad-retina.png')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css')
+    link(rel='stylesheet', type='text/css', href='/css/perspective.css')
+    link(rel='stylesheet', type='text/css', href='/css/flat-ui.css')
+    link(rel='stylesheet', href='/css/style.css')
+  body(class=page,data-page=page)
+    block content
+
+    include ./templates/results
+    include ./templates/profile
+    include ./templates/results_details_view
+    include ./templates/playlist_track
+    include ./templates/current_track
+    include ./templates/search_form
+
+    script(src='/vendor/modernizr/modernizr.js')
+    //- script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src='/socket.io/socket.io.js')
+    script(src='/vendor/requirejs/require.js', type='text/javascript',data-main="js/boot.min")

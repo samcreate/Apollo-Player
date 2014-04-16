@@ -1,0 +1,26 @@
+script(type='text/x-handlebars-template', id='current-track-template')
+    .col-lg-2.col-md-3.col-sm-3.currently_playing.col-md-offset-1
+            .album_container
+                a.controls.PLAYING(href="#")
+                img(src="{{this.album.art.small}}", width="100%",height="100%").img-responsive
+        .col-lg-4.col-md-4.col-sm-5.track_name
+            .row.parentrow
+                h1 {{this.name}}
+                
+        .col-lg-3.col-md-3.track_desc.col-sm-3.col-lg-offset-1
+            .row.parentrow
+                .col-lg-1.col-md-1.col-md-pull-2.col-sm-pull-2.col-sm-1.col-xs-4
+                    .row.bombrow
+                        a.btn.btn-primary.btn-lg.bomb(href='#bomb', role='button' data-toggle='tooltip', data-placement='right', title="If three different people click this, it means your song sucks and it's going to be skipped")
+                                span.count {{this.bomb_count}} 
+                .col-lg-10.col-md-9.col-sm-9.col-xs-8
+                    .row.rowdl
+                        dl
+                            dt Artist:
+                            dd.artist {{this.album.artists.0.name}}
+                            dt Album:
+                            dd.album {{this.album.name}}
+                            dt Track Time:
+                            dd.time {{time this.length}}
+                            dt Added by:
+                            dd.user {{this.by.name}}
