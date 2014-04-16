@@ -45,7 +45,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
     $ cd Apollo-Player
     ```
 2. Install Node dependencies 
-    ```javascript
+    ```
     npm install
     ```
 3. Configure Apollo 
