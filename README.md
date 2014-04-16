@@ -46,7 +46,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
     ```
 2. Install Node dependencies 
     ```
-    npm install
+    $ npm install
     ```
 3. Configure Apollo 
     1. Create a file called config.js in root directory of Apollo
