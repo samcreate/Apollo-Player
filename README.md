@@ -75,7 +75,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
 
 3. Start Apollo
     ```javascript
-    node apollo.js
+    $ node apollo.js
     ```
 
 Once Apollo is started, navigate to your localhost: http://localhost:3000
