@@ -89,6 +89,11 @@ Once Apollo is started, navigate to your localhost: http://localhost:3000
 
 Finished!
 
+### Notes
+
+- If you change a value in config.js, you'll need to restart node (ctrl+c)
+- Apollo works best in Chrome.
+
 ### Help? Bugs?
 
 - [Ask questions here](https://groups.google.com/forum/#!forum/apolloplayer)
