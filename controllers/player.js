@@ -244,8 +244,11 @@ function Player (app,server) {
 
 		self.mopidy.library.lookup(uri).then(function(tracks) {
 
-			self.default_playlist = tracks;
-			self.mopidy.tracklist.add(tracks);
+			//get an random array of 34 tracks.
+			var subsetTracks = self.util.createSubset(tracks,34);
+			self.default_playlist = subsetTracks;
+			self.mopidy.tracklist.clear();
+			self.mopidy.tracklist.add(subsetTracks);
 			self.mopidy.tracklist.shuffle();
 			self.play();
 		});
@@ -414,6 +417,17 @@ function Player (app,server) {
 				return tracks;
 			}
 
+		},
+		createSubset: function(arr, amount){
+			var i = arr.length;
+			while (--i) {
+			  var j = Math.floor(Math.random() * (i + 1))
+			  var temp = arr[i];
+			  arr[i] = arr[j];
+			  arr[j] = temp;
+			}
+			var subset = arr.slice(0,amount);
+			return subset;
 		}
 	};
 }
