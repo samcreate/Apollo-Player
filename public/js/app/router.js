@@ -47,6 +47,7 @@ define([
         this.defaultView = new DefaultPlaylistView({el: document.getElementById('default_playlist_container')});
         
         this.playList.on("current_track_ready",function(){
+          scope.defaultView.hide();
           scope.currentTrackView.$el.show();
           scope.currentTrackModel.clear();
           scope.currentTrackModel.set(this.current_track);
@@ -56,6 +57,7 @@ define([
         });
         this.playList.on("notracks",function(){
           scope.currentTrackView.$el.hide();
+          scope.defaultView.show();
           $('.album_bg').css({"background-image":''});
         });
 
@@ -84,7 +86,7 @@ define([
         });
         $('.outer-nav').prepend(this.profileView.el);
         
-      
+        window.appz = this;
         
         //socket connection to server
         var socket = io.connect();

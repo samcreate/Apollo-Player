@@ -610,17 +610,29 @@ div.container #video_background {
   z-index: -1000;
 }
 div.container .default_playlist_container {
+  display: none;
   z-index: 9999;
   position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -73px;
   margin-top: -51px;
+  -webkit-animation: pulsate 2s ease-out;
+  -moz-animation: pulsate 2s ease-out;
+  -o-animation: pulsate 2s ease-out;
+  -ms-animation: pulsate 2s ease-out;
+  animation: pulsate 2s ease-out;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -ms-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 }
 div.container .default_playlist_container .icon_wrapper {
   width: 144px;
   height: 70px;
   overflow: hidden;
+  color: #fff;
 }
 div.container .default_playlist_container .icon_wrapper .icon {
   font-family: "entypo";
@@ -635,11 +647,19 @@ div.container .default_playlist_container span,
 div.container .default_playlist_container .icon_wrapper {
   float: left;
   clear: left;
+  color: #fff;
 }
 div.container .default_playlist_container span.txt {
   font-family: "latohairline";
   letter-spacing: 7px;
   margin-left: 17px;
+}
+div.container .tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #fff;
+}
+div.container .tooltip-inner {
+  background-color: #fff;
+  color: #000;
 }
 div.container .current_track {
   overflow: hidden;
@@ -1085,6 +1105,101 @@ div.container .playlist .tracks dl dt {
     -o-transform: scale(1) rotate(0);
     -ms-transform: scale(1) rotate(0);
     transform: scale(1) rotate(0);
+  }
+}
+@-moz-keyframes pulsate {
+  0% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+
+  50% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+
+  100% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+}
+@-webkit-keyframes pulsate {
+  0% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+
+  50% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+
+  100% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+}
+@-o-keyframes pulsate {
+  0% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+
+  50% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+
+  100% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+}
+@-ms-keyframes pulsate {
+  0% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+
+  50% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+
+  100% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+}
+@keyframes pulsate {
+  0% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  }
+
+  50% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+
+  100% {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
   }
 }
 @-moz-keyframes count-animation {

@@ -7,13 +7,18 @@ define([
 
   var DefaultPlaylistView = Backbone.View.extend({
 		initialize: function(){
-			this.template = Handlebars.compile(this.el);
-			this.render();
+			this.hide();
+			this.$el.tooltip();	
 		},
-		render: function(){			
-			var html = this.template();
-			this.$el.html(html);
+		render: function(){
+			this.$el.html(this.el);
 			return this;
+		},
+		hide: function(){
+			this.$el.hide();
+		},
+		show: function(){
+			this.$el.show();
 		}
 	});
 
