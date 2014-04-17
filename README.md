@@ -78,7 +78,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
             3. Website: http://localhost.com  (required)
             3. Callback URL: http://localhost.com/auth/twitter/callback  (required)
             4. Allow this application to be used to Sign in with Twitter: leave unchecked.
-    4. Add your Spotify default playlist uri. This is what plays when all the songs in the queue have finished playing (required)
+    4. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
 
 3. Start Apollo
     ```javascript
