@@ -640,9 +640,6 @@ div.container .default_playlist_container .icon_wrapper .icon {
   position: relative;
   top: -87px;
 }
-div.container .default_playlist_container .icon_wrapper .icon:before {
-  content: "✇";
-}
 div.container .default_playlist_container span,
 div.container .default_playlist_container .icon_wrapper {
   float: left;
