@@ -19,7 +19,13 @@ block content
                         
             .album_bg
             .gradient_cover  
-            .bomb_animation#bomb   
+            .bomb_animation#bomb 
+            .default_playlist_container#default_playlist_container(data-toggle='tooltip', data-placement='right', title="If three different people click this, it means your song sucks and it's going to be skipped")
+                span.txt DEFAULT
+                .icon_wrapper
+                    span.icon
+                span.txt PLAYLIST
+
         div.search_container
             div.outer-nav.left.vertical                    
                 //- profile goes here

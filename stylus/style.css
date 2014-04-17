@@ -614,32 +614,12 @@ div.container .default_playlist_container {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -73px;
-  margin-top: -51px;
 }
-div.container .default_playlist_container .icon_wrapper {
-  width: 144px;
-  height: 70px;
-  overflow: hidden;
-}
-div.container .default_playlist_container .icon_wrapper .icon {
+div.container .default_playlist_container .icon {
   font-family: "entypo";
-  font-size: 240px;
-  position: relative;
-  top: -87px;
 }
-div.container .default_playlist_container .icon_wrapper .icon:before {
+div.container .default_playlist_container .icon:before {
   content: "✇";
-}
-div.container .default_playlist_container span,
-div.container .default_playlist_container .icon_wrapper {
-  float: left;
-  clear: left;
-}
-div.container .default_playlist_container span.txt {
-  font-family: "latohairline";
-  letter-spacing: 7px;
-  margin-left: 17px;
 }
 div.container .current_track {
   overflow: hidden;

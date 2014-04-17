@@ -11,8 +11,9 @@ define([
   'app/views/results-view',
   'app/views/results-details-view',
   'app/views/profile-view',
-  'app/models/user-model'
-], function($, _, Backbone, PlayListView, TrackModel, PlayListCollection, CurrentTrackView, SearchFormView, SearchCollection, ResultsView, ResultsDetailsView, ProfileView, UserModel) {
+  'app/models/user-model',
+  'app/views/default-playlist-view'
+], function($, _, Backbone, PlayListView, TrackModel, PlayListCollection, CurrentTrackView, SearchFormView, SearchCollection, ResultsView, ResultsDetailsView, ProfileView, UserModel, DefaultPlaylistView) {
   
   var AppRouter = Backbone.Router.extend({
     routes: {
@@ -34,14 +35,16 @@ define([
         this.playListView = new PlayListView({
             collection: this.playList
         });
-        window.playList = this.playList;
-        window.playListView = this.playListView;
+        this.playList = this.playList;
+        this.playListView = this.playListView;
         this.playList.fetch();
 
         $('.playlist').empty().append(this.playListView.el);
 
-        scope.currentTrackModel = new TrackModel();
-        scope.currentTrackView = new CurrentTrackView({model:scope.currentTrackModel});
+        this.currentTrackModel = new TrackModel();
+        this.currentTrackView = new CurrentTrackView({model:this.currentTrackModel});
+
+        this.defaultView = new DefaultPlaylistView({el: document.getElementById('default_playlist_container')});
         
         this.playList.on("current_track_ready",function(){
           scope.currentTrackView.$el.show();
@@ -81,7 +84,7 @@ define([
         });
         $('.outer-nav').prepend(this.profileView.el);
         
-        window.fart = this;
+      
         
         //socket connection to server
         var socket = io.connect();
