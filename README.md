@@ -72,7 +72,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
         ```
     3. Setup a [Twitter app](https://apps.twitter.com/) and fill in the twitter consumer key and consumer secret. (required)
         1. After you've created an app, you'll need to make sure you have these details filled in for authentication to work.
-        2. Application details
+        2. Application details (Even though your localhost is going to be running on port 3000, just fill in these details exactly to make work)
             1. Name: can be whatever you want (required)
             2. Description: can be whatever you want (required)
             3. Website: http://localhost.com  (required)
