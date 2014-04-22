@@ -94,6 +94,11 @@ Finished!
 - If you change a value in config.js, you'll need to restart node (ctrl+c)
 - Apollo works best in Chrome.
 
+### Tech used
+
+- Frontend: Backbone, RequireJS, Bootstrap, Handelbars, Jade templating and stylus 
+- Backend: Node.js, ExpressJS
+
 ### Help? Bugs?
 
 - [Ask questions here](https://groups.google.com/forum/#!forum/apolloplayer)
