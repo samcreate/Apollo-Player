@@ -42,6 +42,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
 1. Clone Apollo to a local folder
     ```
     $ git clone https://github.com/samcreate/Apollo-Player.git
+
     $ cd Apollo-Player
     ```
 2. Install Node dependencies 
