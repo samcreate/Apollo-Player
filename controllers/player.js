@@ -46,7 +46,6 @@ function Player (app,server) {
 	this.stop = function(req, res){
 
 		// console.log('self.mopidy.tracklist',self.mopidy);
-		console.log("hahaha",self.mopidy.playback.getCurrentTrack());
 
 		res_json.success(res,"");
 	}
@@ -131,7 +130,6 @@ function Player (app,server) {
 			res_json.success(res, {'tracks':_playlist});
 		}
 
-		//update bomb list
 		
 	}
 
