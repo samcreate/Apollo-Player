@@ -53,7 +53,7 @@ define([
           scope.currentTrackModel.set(this.current_track);
           scope.currentTrackView.render();
           $('.current_track').append(scope.currentTrackView.el);
-          $('.album_bg').css({"background-image":'url('+scope.currentTrackModel.get('album').art.large+')'});
+          $('.album_bg').css({"background-image":'url('+scope.currentTrackModel.get('album').art+')'});
         });
         this.playList.on("notracks",function(){
           scope.currentTrackView.$el.hide();

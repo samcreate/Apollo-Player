@@ -2,7 +2,7 @@ script(type='text/x-handlebars-template', id='current-track-template')
     .col-lg-2.col-md-3.col-sm-3.currently_playing.col-md-offset-1
             .album_container
                 a.controls.PLAYING(href="#")
-                img(src="{{this.album.art.small}}", width="100%",height="100%").img-responsive
+                img(src="{{this.album.art}}", width="100%",height="100%").img-responsive
         .col-lg-4.col-md-4.col-sm-5.track_name
             .row.parentrow
                 h1 {{this.name}}

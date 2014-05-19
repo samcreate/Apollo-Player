@@ -353,16 +353,12 @@ function Player (app,server) {
 			}, function(error, response, body) {
 				
 					var response = JSON.parse(body);
-					var album_sm = response.thumbnail_url;
-					var album_lg = function(str){
+					var album_art_640 = function(str){
 						str = str.split('cover');
 						return str[0]+'640'+str[1];
-					}(album_sm);
+					}(response.thumbnail_url);
 
-					p_track.album.art = {
-						small: album_sm,
-						large: album_lg
-					}
+					p_track.album.art = album_art_640;
 
 					p_callback.apply(self,[error,p_track]);
 				
