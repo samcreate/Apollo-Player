@@ -64,7 +64,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
             "twitter_callback":"http://localhost:3000/auth/twitter/callback",
             "consumerKey":"YOUR TWITTER CONSUMER KEY",
             "consumerSecret":"YOUR TWITTER SECRET",
-            "default_playlist_uri":"SPOTIFY URI TO DEFAULT PLAY LIST",
+            "default_playlist_uri":"SPOTIFY URI TO DEFAULT PLAY LIST (cannot be private!)",
             "htmlPretty": "true"
           }
         };
