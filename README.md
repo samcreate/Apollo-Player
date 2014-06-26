@@ -59,6 +59,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
         var config = {
           development: {
             server: {
+              host: "localhost",
               port: 3000,
             },
             "twitter_callback":"http://localhost:3000/auth/twitter/callback",

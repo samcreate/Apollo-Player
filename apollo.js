@@ -16,6 +16,7 @@ var server = http.createServer(app);
 
 
 // Configure server
+app.set('hostname', config.server.host);
 app.set('port', config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -38,7 +39,7 @@ app.use(function (req, res) {
 app.use(express.errorHandler());
 
 
-server.listen(app.get('port'), function(){
+server.listen(app.get('port'), app.get('hostname'), function(){
   console.log('Express server listening on port ' + app.get('port'));
   routes(app,auth,server);
 });
