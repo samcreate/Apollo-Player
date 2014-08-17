@@ -7,7 +7,7 @@ module.exports = function () {
 	var config,
 		UserController,
 		passport,
-		TwitterStrategy;
+		LocalStrategy;
 
 	// =================================================
 	// = public functions                              =
@@ -19,7 +19,7 @@ module.exports = function () {
 			self.app = p_app;
 			config = require('../config.js');
 			self.passport = passport = require('passport');
-			TwitterStrategy = require('passport-twitter').Strategy;
+			LocalStrategy = require('passport-local').Strategy;
 			_setup_passport();
 			console.log("AUTH INIT")
 
@@ -32,7 +32,6 @@ module.exports = function () {
 		ensureAuthenticatedHome : function(req, res, next){
 			
 			
-
 			if (req.isAuthenticated()) { res.redirect('/player') }
 				 return next();
   				
@@ -57,14 +56,10 @@ module.exports = function () {
 		passport.deserializeUser(function(user, done) {
 		  done(null, user);
 		});
-		passport.use(new TwitterStrategy({
-		    consumerKey: config.consumerKey,
-		    consumerSecret: config.consumerSecret,
-		    callbackURL: config.twitter_callback
-		  },
-		  function(token, tokenSecret, profile, done) {
+		passport.use(new LocalStrategy(
+		  function(username, password, done) {
 
-		    usersController.findOrCreate(profile,function(user){
+		    usersController.findOrCreate(username,function(user){
 		      done(null, user);
 		    });
 
