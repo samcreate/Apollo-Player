@@ -3,10 +3,12 @@ script(type='text/x-handlebars-template', id='playlist-template')
 		em {{this.index}}
 	.col-md-1.avatar.col-md-3.col-sm-1
 		.avatar_container
-			img(src="{{this.by.profile_image}}", alt="{{this.by.name}}")
+			img(src="{{this.album.art}}", alt="{{this.by.name}}")
 	.col-md-8.track_info.col-md-9.col-sm-9.col-lg-9
 		h2.track_name {{this.name}}
 		dl
 			dt Artist:
 			dd {{this.album.artists.0.name}}
+			dt Added by:
+			dd {{this.by.name}}
 	.col-md-2.track_time.col-md-3.col-sm-1.col-lg-1 {{time this.length}}
