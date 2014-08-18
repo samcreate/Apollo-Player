@@ -138,7 +138,6 @@ function Player (app,server) {
 
 
 		var term = req.params.query;
-
 		if (term.indexOf('spotify:') != -1){
 
 			self.mopidy.library.lookup(term).then(function(tracks) {
@@ -151,9 +150,18 @@ function Player (app,server) {
 
 		}else{
 
-			self.mopidy.library.search({any:[term]}, ['spotify:']).then(function(data){
-
-				var tracks = self.util.removeAlreadyAdded(data[0].tracks);
+			self.mopidy.library.search({any:[term]}).then(function(data){
+				// merge all result arrays of all backends
+				// (they might have duplicates though which we tolerate)
+				var results = {'tracks': [], 'artists': [], 'albums': []};
+				for (var i = 0; i < data.length; ++i) {
+					for (var prop in results) {
+						if (data[i][prop] && data[i][prop].length) {
+							results[prop] = results[prop].concat(data[i][prop]);
+						}
+					}
+				}
+				var tracks = self.util.removeAlreadyAdded(results.tracks);
 
 				return res_json.success(res, {'tracks':tracks,'term':term});
 
@@ -343,13 +351,14 @@ function Player (app,server) {
 
 	this.util = {
 		getArt : function(p_track, p_callback){
-
-			request({
-			  uri: "https://embed.spotify.com/oembed/?url="+p_track.uri,
-			  method: "GET",
-			  headers: {
-		        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0'
-		      }
+			// Only send cover art request to spotify if track uri points to spotify
+			if (p_track.uri.substr(0, 'spotify:'.length) === 'spotify:') {
+				request({
+				  uri: "https://embed.spotify.com/oembed/?url="+p_track.uri,
+				  method: "GET",
+				  headers: {
+			          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0'
+				}
 			}, function(error, response, body) {
 
 					var response = JSON.parse(body);
@@ -364,6 +373,12 @@ function Player (app,server) {
 
 
 			});
+			}else{
+				// return dummy image as track
+				p_track.album.art = 'images/apollo.png';
+				p_callback.apply(self,[null, p_track]);
+			}
+
 
 		},
 		check4dup : function(uri){
