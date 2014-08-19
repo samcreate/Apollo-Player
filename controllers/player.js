@@ -18,6 +18,8 @@ function Player (app,server) {
 
 	this.current_track;
 
+	this.lastPlaybackEnded;
+
 	events.EventEmitter.call(this);
 
 	this.mopidy = new Mopidy({
@@ -56,7 +58,6 @@ function Player (app,server) {
 	this.play = function(track){
 		this.status.playbackstatus = 'PLAYING';
 		this.mopidy.playback.play().then(null, console.error.bind(console));
-
 	}
 	this.playpause = function(req, res){
 		if(self.status.playbackstatus == "PLAYING"){
@@ -73,7 +74,8 @@ function Player (app,server) {
 		if(self.online === false) return res_json.error(res, self.status.error_offline_msg);
 
 		var _track = req.body;
-
+		console.log('add: ', _track.name);
+		console.log('add: ', _track.uri);
 		if(self.util.check4dup(_track.uri)){
 
 			var _msg = 'Track is a duplicate';
@@ -102,7 +104,7 @@ function Player (app,server) {
 					self.queue.push(_track);
 
 				}else{
-
+					console.log('add#lookupAndPlay');
 					self.lookupAndPlay(_track);
 
 				}
@@ -183,6 +185,8 @@ function Player (app,server) {
 			self.mopidy.tracklist.clear();
 
 			self.mopidy.tracklist.add(track);
+
+			console.log("lookupAndPlay: ", p_track.name);
 
 			self.play();
 
@@ -279,6 +283,17 @@ function Player (app,server) {
 	}
 
 	this._playbackEnded = function(lastTrack){
+		console.log('_playbackEnded: ', lastTrack);
+
+		// This check "filters" duplicate playback ended events
+		// which seem to be emitted by the javascript mopidy client.
+		// A duplicate causes Apollo to skip two or more tracks in
+		// quick succession potentially emptying the playlist.
+		if(lastTrack.tl_track.track.uri === self.lastPlaybackEnded){
+			console.log('Skipping what appears to be a duplicate event');
+			return;
+		}
+		self.lastPlaybackEnded = lastTrack.tl_track.track.uri;
 
 		if(self.default_playlist != null) {
 
@@ -293,7 +308,7 @@ function Player (app,server) {
 		if(self.queue[0]) {
 
 			var to_be_played = self.queue.shift();
-
+			console.log('playbackEnded#lookupAndPlay');
 			self.lookupAndPlay(to_be_played);
 
 			self.emit('playback:queue', self.util.buildPlaylist() );
