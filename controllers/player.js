@@ -176,7 +176,7 @@ function Player (app,server) {
 
 	this.lookupAndPlay = function(p_track){
 
-		if (typeof p_track === 'undefined') return;
+		if (typeof p_track === 'undefined' || p_track === null) return;
 
 		this.current_track = p_track;
 
@@ -259,10 +259,10 @@ function Player (app,server) {
 			self.mopidy.tracklist.add(subsetTracks);
 			self.mopidy.tracklist.shuffle();
 			self.play();
+			self.emit('playback:defaultTracks', subsetTracks);
+			console.log('playback:defaultTracks', subsetTracks);
 		});
 
-		self.emit('playback:notracks');
-	    console.log('playback:notracks');
 		
 		
 		
@@ -277,7 +277,7 @@ function Player (app,server) {
 
 		self.emit('playback:started', track);
 
-		console.log('playback:started');
+		console.log('playback:started', track);
 	}
 
 	this._playbackEnded = function(lastTrack){
@@ -328,6 +328,9 @@ function Player (app,server) {
 	this._online = function (){
 
 		console.info('[Player.js]: Online');
+		//console.log(self.mopidy);
+		//console.log(self.mopidy.tracklist);
+		//console.log(self.mopidy.playback);
 		self.online = true;
 		self.mopidy.tracklist.clear();
 		self.lookupAndPlay(self.current_track);
