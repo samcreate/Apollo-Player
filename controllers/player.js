@@ -18,7 +18,7 @@ function Player (app,server) {
 	// enhanced track objects (added requestor and cover
 	// art). Otherwise, the browser won't show a cover
 	// or the name of the user who has requested the track.
-	var map = {};
+	var cache = {};
 
 	events.EventEmitter.call(this);
 
@@ -86,7 +86,7 @@ function Player (app,server) {
 						// Lookup track and add to tracklist
 						self.mopidy.tracklist.add(t);
 						self.emit('player:track:added');
-						map[_track.uri] = _track;
+						cache[_track.uri] = _track;
 						res_json.success(res,_track);
 					});
 				});
@@ -113,21 +113,18 @@ function Player (app,server) {
 								// extract track objs from tl_track wrappers
 								var tracks = [];
 								for (var i = 0; i < tl_tracks.length; ++i) {
-									var cacheHit = map[tl_tracks[i].track.uri];
+									var cacheHit = cache[tl_tracks[i].track.uri];
 									if (typeof cacheHit == 'undefined'){
 										// cache miss (the track has been added to the backend
 										// by another frontend)
 										cacheHit = tl_tracks[i].track;
 										// it does not have a user object associated
-										cacheHit.by = req.user;
-										cacheHit.by.name = "???";
-										cacheHit.by.id = "???";
-										cacheHit.by.username = "???";
+										cacheHit.by = {name:"???", id:"???", username:"???"};
 										// nor has it cover artwork
 										//TODO add album from looked up at spotify.com
 										cacheHit.album.art = 'images/apollo.png';
 										// Finally add to cache
-										map[cacheHit.uri] = cacheHit;
+										cache[cacheHit.uri] = cacheHit;
 									}
 									tracks[i] = cacheHit;
 								}
@@ -231,10 +228,15 @@ function Player (app,server) {
 	this._playbackStarted = function(track){
 		self.emit('playback:started', track);
 		console.log('playback:started', track);
+		// track:added causes the client to re-read the playlist.
+		// We want this to advance to the currently playing track.
+		self.emit('player:track:added');
 	}
 
 	this._playbackEnded = function(lastTlTrack){
 		console.log('_playbackEnded: ', lastTlTrack);
+
+		//TODO delete from cache
 		
 		self.mopidy.playback.getCurrentTlTrack().then(function(tl_track) {
 			if (tl_track == null){
@@ -249,37 +251,8 @@ function Player (app,server) {
 				});
 			}
 		});
-/*		self.mopidy.tracklist.getLength().then(function(length){
-			// The end of the tracklist has been reached, if
-			// the length of the tracklist (minus one due to array counting)
-			// is equal to the tracklist track id
-			console.log('tracklist length: ', length);
-			if((length - 1) == parseInt(lastTlTrack.tl_track.tlid)){
-				console.log('Tracklist has reached its end, add one more track from the default playlist');
-				// remove first track from default playlist and have it played
-				var track = self.default_playlist.shift();
-				self.mopidy.library.lookup(track.uri).then(function(track) {
-					self.mopidy.tracklist.add(track);
-					self.play();
-				});
-			}
-		});
-*/	}
+	}
 
-		// This check "filters" duplicate playback ended events
-		// which seem to be emitted by the javascript mopidy client.
-		// A duplicate causes Apollo to skip two or more tracks in
-		// quick succession potentially emptying the playlist.
-/*		if(lastTrack.tl_track.track.uri === self.lastPlaybackEnded){
-			console.log('Skipping what appears to be a duplicate event');
-			return;
-		}
-		self.lastPlaybackEnded = lastTrack.tl_track.track.uri;
-
-		if(self.bomb_switch) {
-			return;
-		}
-*/
 	this._online = function (){
 		console.info('[Player.js]: Online');
 		self.online = true;
