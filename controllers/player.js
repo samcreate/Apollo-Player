@@ -42,7 +42,7 @@ function Player (app,server) {
 
 	this.default_playlist_uri = config.default_playlist_uri || '';
 
-	this.default_playlist = null;
+	this.default_playlist = [];
 
 	this.stop = function(req, res){
 		// console.log('self.mopidy.tracklist',self.mopidy);
@@ -231,11 +231,18 @@ function Player (app,server) {
 	this._playbackStarted = function(track){
 		self.emit('playback:started', track);
 		console.log('playback:started', track);
+
+		// track:added causes the client to re-read the playlist.
+		// Thus, we don't care if a track has been added or removed.
+		// !!!playbackStarted causes the playlist to advance!!!.
+		console.log('player:track:added', track);
+		self.emit('player:track:added');
 	}
 
 	this._tracklistChanged = function(change) {
 		// track:added causes the client to re-read the playlist.
 		// Thus, we don't care if a track has been added or removed.
+		// !!!tracklistChanged is triggered when the backend adds tracks!!!
 		console.log('player:track:added', change);
 		self.emit('player:track:added');
 	}
@@ -252,7 +259,13 @@ function Player (app,server) {
 				console.log('Tracklist has reached its end, adding one more track from the default playlist');
 				// remove first track from default playlist and have it played
 				var track = self.default_playlist.shift();
-				//TODO what happens if the default playlist has been used up?
+				// If there is just a single element left in the playlist, refill it.
+				// This has the minimal chance of a race condition when the last track immediately ends
+				// (e.g. unplayable/bombed/...) before loadDefaultPlayList finished.
+				if(self.default_playlist.length == 1){
+					console.log("No more tracks in default playlist available, re-initializing list");
+					self.loadDefaultPlayList();
+				}
 				self.mopidy.library.lookup(track.uri).then(function(track) {
 					self.mopidy.tracklist.add(track).then(function(addedTracks){
 						self.mopidy.playback.play(addedTracks[0]);
@@ -265,8 +278,8 @@ function Player (app,server) {
 
 	this._online = function (){
 		console.info('[Player.js]: Online');
-		self.online = true;
 		self.loadDefaultPlayList();
+		self.online = true;
 	}
 
 	this._offline = function(){
