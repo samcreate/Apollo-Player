@@ -227,17 +227,19 @@ function Player (app,server) {
 	this._playbackEnded = function(lastTlTrack){
 		console.log('_playbackEnded: ', lastTlTrack);
 
-		//TODO delete from cache
+		// Delete from (frontend) cache the track that now has been played
+		delete cache[lastTlTrack.tl_track.track.uri];
 		
 		self.mopidy.playback.getCurrentTlTrack().then(function(tl_track) {
 			if (tl_track == null){
-				console.log('Tracklist has reached its end, add one more track from the default playlist');
+				console.log('Tracklist has reached its end, adding one more track from the default playlist');
 				// remove first track from default playlist and have it played
 				var track = self.default_playlist.shift();
+				//TODO what happens if the default playlist has been used up?
 				self.mopidy.library.lookup(track.uri).then(function(track) {
 					self.mopidy.tracklist.add(track).then(function(addedTracks){
 						self.mopidy.playback.play(addedTracks[0]);
-						self.emit('playback:queue', [_track]);
+						self.emit('playback:queue', [track]);
 					});
 				});
 			}
