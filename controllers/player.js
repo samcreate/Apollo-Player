@@ -164,49 +164,40 @@ function Player (app,server) {
 	}
 
 	this.bomb = function(req, res){
-		
-		//check if there's anything in the playlist
-		var current_track = self.current_track;
-		if(!current_track){
-			return res_json.error(res, "No tracks have been added yet!");
-		}
-
-
-		if(current_track.hasOwnProperty('bombers')){
-
-			current_track.bombers[req.user.id] = "vote";
-
-			var count = Object.keys(current_track.bombers).length;
-
-			current_track.bomb_count = count;
-
-			if(count >= self.bombThreshold){
-
-				self.bomb_switch = true;
-
-				self.mopidy.library.lookup(self.bomb_track).then(function(track) {
-					
-					self.mopidy.tracklist.clear();
-
-					self.mopidy.tracklist.add(track);
-				
-					self.play();
-
-					setTimeout(function(){
-						self.bomb_switch = false;
-					},1700);
-					
-				
-				});
+		// get the current track from the backend to lookup the track in the frontend cache.
+		// the frontend cache obj has the bomber counts.
+		self.mopidy.playback.getCurrentTlTrack().then(function(current_tl_track) {
+			if (current_tl_track == null){
+				console.log('No track is being played, thus cannot bomb!');
+				return;
 			}
 
-		}else{
-			current_track.bombers = {};
-			current_track.bombers[req.user.id] = "vote";
-			current_track.bomb_count = 1;
-		}
-		self.emit('player:bomb:update', current_track.bomb_count);
-		res_json.success(res, {track:current_track});
+			// Initialize frontend track object to maintain list of bombers
+			// because it has not been bombed before
+			var track = cache[current_tl_track.track.uri];
+			if(!track.hasOwnProperty('bombers')){
+				track.bombers = {};
+			}
+
+			// add user to bomb list. If user has cast a vote already, it won't increase
+			// the count. It will just replace the previous vote.
+			track.bombers[req.user.id] = "vote";
+			var count = Object.keys(track.bombers).length;
+				
+			if(count >= self.bombThreshold){
+				// insert booo track into the tracklist at the next position
+				self.mopidy.tracklist.index(current_tl_track).then(function(idx) {
+					self.mopidy.library.lookup(self.bomb_track).then(function(bomb_track) {
+						self.mopidy.tracklist.add(bomb_track, (idx + 1)).then(function(addedTracks){
+							self.mopidy.playback.play(addedTracks[0]);
+						});
+					});
+				});
+			}
+			// notify client
+			self.emit('player:bomb:update', count);
+			res_json.success(res, {track:track});
+		});
 	}
 
 
