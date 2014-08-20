@@ -231,8 +231,12 @@ function Player (app,server) {
 	this._playbackStarted = function(track){
 		self.emit('playback:started', track);
 		console.log('playback:started', track);
+	}
+
+	this._tracklistChanged = function(change) {
 		// track:added causes the client to re-read the playlist.
-		// We want this to advance to the currently playing track.
+		// Thus, we don't care if a track has been added or removed.
+		console.log('player:track:added', change);
 		self.emit('player:track:added');
 	}
 
@@ -287,6 +291,7 @@ function Player (app,server) {
 	this.mopidy.on("state:offline", this._offline.bind(this));
 	this.mopidy.on('event:trackPlaybackStarted', this._playbackStarted.bind(this));
 	this.mopidy.on('event:trackPlaybackEnded', this._playbackEnded.bind(this));
+	this.mopidy.on('event:tracklistChanged', this._tracklistChanged.bind(this));
 	//this.mopidy.on('event:playbackStateChanged', ...); // Called if state changes between stopped and playing (which happens after each track)
 
 	this.util = {
