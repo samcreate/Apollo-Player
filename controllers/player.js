@@ -3,7 +3,6 @@ var Mopidy = require("mopidy");
 var res_json = require('../util/response_helper');
 var request = require('request');
 var usersController = require('./usersController');
-var defaultPlaylist = require('./defaultPlaylist');
 var config = require('../config');
 
 Player.prototype = new events.EventEmitter;
@@ -313,12 +312,12 @@ function Player (app,server) {
 			// Only send cover art request to spotify if track uri points to spotify
 			if (p_track.uri.substr(0, 'spotify:'.length) === 'spotify:') {
 				request({
-				  uri: "https://embed.spotify.com/oembed/?url="+p_track.uri,
-				  method: "GET",
-				  headers: {
-			          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0'
-				}
-			}, function(error, response, body) {
+					uri: "https://embed.spotify.com/oembed/?url="+p_track.uri,
+					method: "GET",
+					headers: {
+						'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0'
+					}
+				}, function(error, response, body) {
 					var response = JSON.parse(body);
 					var album_art_640 = function(str){
 						str = str.split('cover');
@@ -327,7 +326,7 @@ function Player (app,server) {
 
 					p_track.album.art = album_art_640;
 					p_callback.apply(self,[error,p_track]);
-			});
+				});
 			}else{
 				// return dummy image as track
 				p_track.album.art = 'images/apollo.png';
