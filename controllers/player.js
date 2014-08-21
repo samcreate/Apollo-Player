@@ -4,6 +4,7 @@ var res_json = require('../util/response_helper');
 var request = require('request');
 var usersController = require('./usersController');
 var config = require('../config');
+var Q = require('q');
 
 Player.prototype = new events.EventEmitter;
 
@@ -82,8 +83,8 @@ function Player (app,server) {
 					if(err) return res_json.error(res,err);
 
 					self.mopidy.library.lookup(_track.uri).then(function(t){
-						// Lookup track and add to tracklist
-						self.mopidy.tracklist.add(t);
+					// Lookup track and add to tracklist
+					self.mopidy.tracklist.add(t);
 						self.emit('player:track:added');
 						cache[_track.uri] = _track;
 						res_json.success(res,_track);
@@ -112,23 +113,21 @@ function Player (app,server) {
 							self.mopidy.tracklist.slice(idx, length).then(function(tl_tracks){
 								// extract track objs from tl_track wrappers
 								var tracks = [];
-								for (var i = 0; i < tl_tracks.length; ++i) {
-									var cacheHit = cache[tl_tracks[i].track.uri];
-									if (typeof cacheHit == 'undefined'){
-										// cache miss (the track has been added to the backend
-										// by another frontend)
-										cacheHit = tl_tracks[i].track;
-										// it does not have a user object associated
-										cacheHit.by = {name:"???", id:"???", username:"???"};
-										// nor has it cover artwork
-										//TODO add album from looked up at spotify.com
-										cacheHit.album.art = 'images/apollo.png';
-										// Finally add to cache
-										cache[cacheHit.uri] = cacheHit;
-									}
-									tracks[i] = cacheHit;
+								var promises = [];
+								// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures#Creating_closures_in_loops.3A_A_common_mistake
+								function scopeHelper(deferred) {
+									return function() {
+										deferred.resolve('done');
+									};
 								}
-								res_json.success(res, {'tracks':tracks});
+								for (var i = 0; i < tl_tracks.length; i++) {
+									var deferred = Q.defer();
+									self.util.lookupOrCreate(scopeHelper(deferred), tl_tracks[i].track, tracks, i);
+									promises.push(deferred.promise);
+								}
+								Q.all(promises).then(function() {
+									res_json.success(res, {'tracks':tracks});
+								});
 							});
 						});
 					});
@@ -137,32 +136,50 @@ function Player (app,server) {
 		});
 	}
 
-
 	this.search = function(req, res){
 		var term = req.params.query;
-		if (term.indexOf('spotify:') != -1){
-			self.mopidy.library.lookup(term).then(function(tracks) {
-				var tracks = self.util.removeAlreadyAdded(tracks);
 
-				return res_json.success(res, {'tracks':tracks,'term':term});
-			});
-		}else{
-			self.mopidy.library.search({any:[term]}).then(function(data){
-				// merge all result arrays of all backends
-				// (they might have duplicates though which we tolerate)
-				var results = {'tracks': [], 'artists': [], 'albums': []};
-				for (var i = 0; i < data.length; ++i) {
-					for (var prop in results) {
-						if (data[i][prop] && data[i][prop].length) {
-							results[prop] = results[prop].concat(data[i][prop]);
+		self.mopidy.tracklist.getTlTracks().then(function(tl_tracks){
+			if (term.indexOf('spotify:') != -1){
+				self.mopidy.library.lookup(term).then(function(tracks) {
+
+					// Project the track.uris out of tl_tracks
+					var tl_uris = tl_tracks.map(function(element) {
+						return element.track.uri
+					});
+
+					// Now filter the tracks on the tl_uris
+					var subset = tracks.filter(function(element){
+						return tl_uris.indexOf(element.uri) == -1;
+					});
+					return res_json.success(res, {'tracks':subset,'term':term});
+				});
+			}else{
+				self.mopidy.library.search({any:[term]}).then(function(data){
+					// merge all result arrays of all backends
+					// (they might have duplicates though which we tolerate)
+					var results = {'tracks': [], 'artists': [], 'albums': []};
+					for (var i = 0; i < data.length; ++i) {
+						for (var prop in results) {
+							if (data[i][prop] && data[i][prop].length) {
+								results[prop] = results[prop].concat(data[i][prop]);
+							}
 						}
 					}
-				}
-				var tracks = self.util.removeAlreadyAdded(results.tracks);
-				return res_json.success(res, {'tracks':tracks,'term':term});
-			});
 
-		}
+					// Project the track.uris out of tl_tracks
+					var tl_uris = tl_tracks.map(function(element) {
+						return element.track.uri
+					});
+
+					// Now filter the result on the tl_uris
+					var subset = results.tracks.filter(function(element){
+						return tl_uris.indexOf(element.uri) == -1;
+					});
+					return res_json.success(res, {'tracks':subset,'term':term});
+				});
+			}
+		});
 	}
 
 	this.bomb = function(req, res){
@@ -307,8 +324,32 @@ function Player (app,server) {
 	//this.mopidy.on('event:playbackStateChanged', ...); // Called if state changes between stopped and playing (which happens after each track)
 
 	this.util = {
-		getArt : function(p_track, p_callback){
+
+		lookupOrCreate : function(callback, track, tracks, idx) {
+			var cacheHit = cache[track.uri];
+			if (typeof cacheHit == 'undefined'){
+				// cache miss (the track has been added to the backend
+				// by another frontend)
+				cacheHit = track;
+				//console.log('Cache miss for: ', cacheHit);
+				// it does not have a user object associated
+				cacheHit.by = {name:"???", id:"???", username:"???"};
+				// nor has it cover artwork
+				self.util.getArt(cacheHit, callback);
+				// Finally add to cache
+				cache[cacheHit.uri] = cacheHit;
+			}else{
+				callback.apply(self,[]);
+			}
+			tracks[idx] = cacheHit;
+		},
+
+		getArt : function(p_track, callback){
 			console.log('Getting cover for: ',p_track);
+
+			// return dummy image as track by default
+			p_track.album.art = 'images/apollo.png';
+
 			// Only send cover art request to spotify if track uri points to spotify
 			if (p_track.uri.substr(0, 'spotify:'.length) === 'spotify:') {
 				request({
@@ -325,19 +366,11 @@ function Player (app,server) {
 					}(response.thumbnail_url);
 
 					p_track.album.art = album_art_640;
-					p_callback.apply(self,[error,p_track]);
+					callback.apply(self,[null, p_track]);
 				});
-			}else{
-				// return dummy image as track
-				p_track.album.art = 'images/apollo.png';
-				p_callback.apply(self,[null, p_track]);
+			} else {
+				callback.apply(self,[null, p_track]);
 			}
-		},
-
-
-		removeAlreadyAdded : function(tracks){
-			//TODO check current tracklist
-			return tracks;
 		},
 
 		createSubset: function(arr, amount){
