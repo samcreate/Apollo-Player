@@ -332,10 +332,8 @@ function Player (app,server) {
 		},
 
 		getArt : function(p_track, callback){
-			console.log('Getting cover for: ',p_track);
-
 			// return dummy image as track by default
-			p_track.album.art = 'images/apollo.png';
+			p_track.album.art = 'images/default_cover.png';
 
 			// Only send cover art request to spotify if track uri points to spotify
 			if (p_track.uri.substr(0, 'spotify:'.length) === 'spotify:') {
