@@ -92,6 +92,8 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
 
 Once Apollo is started, navigate to your localhost: http://localhost:3000
 
+Optionally on Debian/Ubuntu, you might want to start Apollo as a system [service](https://gist.github.com/peterhost/715255).
+
 Finished!
 
 ### Notes
