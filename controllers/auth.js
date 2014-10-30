@@ -1,4 +1,5 @@
 var usersController = require('./usersController');
+var gravatar = require('gravatar');
 
 module.exports = function () {
 	// =================================================
@@ -7,7 +8,7 @@ module.exports = function () {
 	var config,
 		UserController,
 		passport,
-		TwitterStrategy;
+		GoogleStrategy;
 
 	// =================================================
 	// = public functions                              =
@@ -19,7 +20,7 @@ module.exports = function () {
 			self.app = p_app;
 			config = require('../config.js');
 			self.passport = passport = require('passport');
-			TwitterStrategy = require('passport-twitter').Strategy;
+			GoogleStrategy = require('passport-google').Strategy;
 			_setup_passport();
 			console.log("AUTH INIT")
 
@@ -57,17 +58,30 @@ module.exports = function () {
 		passport.deserializeUser(function(user, done) {
 		  done(null, user);
 		});
-		passport.use(new TwitterStrategy({
-		    consumerKey: config.consumerKey,
-		    consumerSecret: config.consumerSecret,
-		    callbackURL: config.twitter_callback
+		
+		passport.use(new GoogleStrategy({
+		    returnURL: 'http://localhost:3000/auth/google/return',
+    		realm: 'http://localhost:3000/'
 		  },
-		  function(token, tokenSecret, profile, done) {
+		  function(identifier, profile, done) {
+		    // asynchronous verification, for effect...
+		    process.nextTick(function () {
+		      
+		      // To keep the example simple, the user's Google profile is returned to
+		      // represent the logged-in user.  In a typical application, you would want
+		      // to associate the Google account with a user record in your database,
+		      // and return that user instead.
+		      
+		      var profile_photo_url = gravatar.url(profile.emails[0].value, {s: '200'});
+			      profile.profile_photo = profile_photo_url;
+			      profile.identifier = identifier;
 
-		    usersController.findOrCreate(profile,function(user){
-		      done(null, user);
+			      
+				usersController.findOrCreate(profile,function(profile){
+					return done(null, profile);
+				});
+		      
 		    });
-
 		  }
 		));
 	}

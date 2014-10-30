@@ -15,6 +15,7 @@ function UsersController () {
 
 	this.findOrCreate = function(p_user,p_callback){
 
+
 		for (var x in self.users_list) {
 			if(self.users_list[x].id === p_user.id){
 				p_callback(self.users_list[x]);

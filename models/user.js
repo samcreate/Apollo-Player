@@ -3,20 +3,19 @@ var events = require('events');
 User.prototype = new events.EventEmitter;
 
 
-function User (p_twitter_raw) {
+function User (p_google_raw) {
 	'use strict';
 
 	var self = this;
 
+	console.log(p_google_raw);
+
 	events.EventEmitter.call(this);
-	self.username = p_twitter_raw.username;
-	self.id = p_twitter_raw.id;
-	self.name = p_twitter_raw.displayName;
-	self.profile_image = p_twitter_raw.photos[0].value;
-	self.profile_image_lg = function(p_url){
-		var ar = p_url.split('_normal');
-	  	return ar[0]+ar[1];
-	}(self.profile_image);
+	self.username = p_google_raw.displayName;
+	self.id = p_google_raw.emails[0].value;
+	self.name = p_google_raw.displayName;
+	self.profile_image = p_google_raw.profile_photo;
+	self.profile_image_lg = p_google_raw.profile_photo;
 	
 	self.emit('user:updated');
 	self.bombed = {has:false};

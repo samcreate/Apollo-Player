@@ -14,7 +14,6 @@ define([
   'app/models/user-model',
   'app/views/default-playlist-view'
 ], function($, _, Backbone, PlayListView, TrackModel, PlayListCollection, CurrentTrackView, SearchFormView, SearchCollection, ResultsView, ResultsDetailsView, ProfileView, UserModel, DefaultPlaylistView) {
-  
   var AppRouter = Backbone.Router.extend({
     routes: {
       
@@ -27,7 +26,8 @@ define([
     var app_router = new AppRouter;
 
     app_router.on('route:setupPlayerSearch', function(){
-        
+         
+
         var scope = this;
 
         //playlist
@@ -44,8 +44,11 @@ define([
         this.currentTrackModel = new TrackModel();
         this.currentTrackView = new CurrentTrackView({model:this.currentTrackModel});
 
+        console.log('here 24');
+
         this.defaultView = new DefaultPlaylistView({el: document.getElementById('default_playlist_container')});
-        
+        console.log('here 25');
+
         this.playList.on("current_track_ready",function(){
           scope.defaultView.hide();
           scope.currentTrackView.$el.show();
@@ -55,6 +58,7 @@ define([
           $('.current_track').append(scope.currentTrackView.el);
           $('.album_bg').css({"background-image":'url('+scope.currentTrackModel.get('album').art+')'});
         });
+
         this.playList.on("notracks",function(){
           scope.currentTrackView.$el.hide();
           scope.defaultView.show();

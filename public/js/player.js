@@ -10,12 +10,12 @@ define(["jquery","app/router","underscore","backbone","perspective"], function($
 
           //--> sof private functions
 
-          
-
+        
           window.onresize = function() {
             window.scrollTo(0, 0);
           } 
 
+         
         router.initialize();
         perspective.init();
 

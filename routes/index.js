@@ -29,10 +29,11 @@ module.exports = function (app,auth,server) {
 
 
 	//twitter auth
-	app.get('/auth/twitter', auth.passport.authenticate('twitter'));
-	app.get('/auth/twitter/callback', 
-	  auth.passport.authenticate('twitter', { successRedirect: '/player',
+	app.get('/auth/google', auth.passport.authenticate('google'));
+	app.get('/auth/google/return', 
+	  auth.passport.authenticate('google', { successRedirect: '/player',
 	                                     failureRedirect: '/login' }));
+	
 	app.get('/logout', function(req, res){
 	  req.logout();
 	  res.redirect('/');
