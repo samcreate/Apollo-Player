@@ -11,7 +11,7 @@ Opensource community driven playlist using Spotify, Mopidy, Node.js and Backbone
 ## Features
 
 - Simple and elegant group playlist
-- Song Bombs =  3 unique votes skips the track and "boos" the player
+- Song Bombs =  3 (configurable) unique votes skips the track and "boos" the player
 - Search keywords or Spotify URI's
 - Play / Pause toggle 
 - Default Playlist (plays when Apollo runs out of songs to play)
@@ -66,7 +66,8 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
             "consumerKey":"YOUR TWITTER CONSUMER KEY",
             "consumerSecret":"YOUR TWITTER SECRET",
             "default_playlist_uri":"SPOTIFY URI TO DEFAULT PLAY LIST (cannot be private!)",
-            "htmlPretty": "true"
+            "htmlPretty": "true",
+            "bombThreshold": 3
           }
         };
         

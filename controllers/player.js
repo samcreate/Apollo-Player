@@ -33,7 +33,7 @@ function Player (app,server) {
 
 	this.online = false;
 
-	this.bombThreshold = 3;
+	this.bombThreshold = config.bombThreshold || 3;
 
 	this.bomb_track = "spotify:track:1JFeNGtkTjiTWgSSz0iHq5";
 
@@ -56,7 +56,7 @@ function Player (app,server) {
 	this.play = function(track){
 		this.status.playbackstatus = 'PLAYING';
 		this.mopidy.playback.play().then(null, console.error.bind(console));
-		
+
 	}
 	this.playpause = function(req, res){
 		if(self.status.playbackstatus == "PLAYING"){
@@ -71,7 +71,7 @@ function Player (app,server) {
 
 
 		if(self.online === false) return res_json.error(res, self.status.error_offline_msg);
-		
+
 		var _track = req.body;
 
 		if(self.util.check4dup(_track.uri)){
@@ -111,7 +111,7 @@ function Player (app,server) {
 
 			});
 
-			
+
 
 
 		}
@@ -121,7 +121,7 @@ function Player (app,server) {
 
 	this.playlist = function(req, res){
 
-		
+
 		var _playlist = self.util.buildPlaylist();
 
 		if(_playlist[0] === "empty"){
@@ -130,7 +130,7 @@ function Player (app,server) {
 			res_json.success(res, {'tracks':_playlist});
 		}
 
-		
+
 	}
 
 
@@ -146,7 +146,7 @@ function Player (app,server) {
 				var tracks = self.util.removeAlreadyAdded(tracks);
 
 			    return res_json.success(res, {'tracks':tracks,'term':term});
-			    
+
 			});
 
 		}else{
@@ -158,7 +158,7 @@ function Player (app,server) {
 				return res_json.success(res, {'tracks':tracks,'term':term});
 
 			});
-		    
+
 		}
 
 	}
@@ -171,18 +171,18 @@ function Player (app,server) {
 		this.current_track = p_track;
 
 		self.mopidy.library.lookup(p_track.uri).then(function(track) {
-					
+
 			self.mopidy.tracklist.clear();
 
 			self.mopidy.tracklist.add(track);
-		
+
 			self.play();
-		
+
 		});
 	}
 
 	this.bomb = function(req, res){
-		
+
 		//check if there's anything in the playlist
 		var current_track = self.current_track;
 		if(!current_track){
@@ -203,30 +203,30 @@ function Player (app,server) {
 				self.bomb_switch = true;
 
 				self.mopidy.library.lookup(self.bomb_track).then(function(track) {
-					
+
 					self.mopidy.tracklist.clear();
 
 					self.mopidy.tracklist.add(track);
-				
+
 					self.play();
 
 					setTimeout(function(){
 						self.bomb_switch = false;
 					},1700);
-					
-				
+
+
 				});
 			}
 
 		}else{
-			
+
 			current_track.bombers = {};
 			current_track.bombers[req.user.id] = "vote";
 			current_track.bomb_count = 1;
 		}
 
 		self.emit('player:bomb:update', current_track.bomb_count);
-		
+
 		res_json.success(res, {track:current_track});
 
 
@@ -253,9 +253,9 @@ function Player (app,server) {
 
 		self.emit('playback:notracks');
 	    console.log('playback:notracks');
-		
-		
-		
+
+
+
 	}
 
 
@@ -274,7 +274,7 @@ function Player (app,server) {
 
 		if(self.default_playlist != null) {
 
-			return; 
+			return;
 		}
 
 
@@ -351,7 +351,7 @@ function Player (app,server) {
 		        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0'
 		      }
 			}, function(error, response, body) {
-				
+
 					var response = JSON.parse(body);
 					var album_art_640 = function(str){
 						str = str.split('cover');
@@ -361,8 +361,8 @@ function Player (app,server) {
 					p_track.album.art = album_art_640;
 
 					p_callback.apply(self,[error,p_track]);
-				
-				
+
+
 			});
 
 		},
@@ -383,29 +383,29 @@ function Player (app,server) {
 			}else{
 				return [ self.current_track || "empty" ];
 			}
-			
+
 		},
 		removeAlreadyAdded : function(tracks){
 			if(self.queue.length > 0){
 				var keepers = [];
 				for (var i = 0; i < tracks.length; i++) {
-					
+
 					for (var x = 0; x < self.queue.length; x++) {
-						
+
 						if(tracks[i].uri == self.queue[x].uri){
 							tracks.splice(i,1);
-							
+
 						}
 					};
 
 				}
 				for (var y = 0; y < tracks.length; y++) {
-					
+
 					if(self.current_track.uri == tracks[y].uri){
 						tracks.splice(y,1);
 					}
 				};
-				
+
 				return tracks;
 			}else{
 				return tracks;
