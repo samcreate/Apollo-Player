@@ -35,11 +35,11 @@ function Player (app,server) {
 
 	this.bombThreshold = config.bombThreshold || 3;
 
-	this.bomb_track = "spotify:track:1JFeNGtkTjiTWgSSz0iHq5";
+	this.bomb_track = config.bomb_track || "spotify:track:1JFeNGtkTjiTWgSSz0iHq5";
 
 	this.bomb_switch = false;
 
-	this.default_playlist_uri = config.default_playlist_uri;
+	this.default_playlist_uri = config.default_playlist_uri || '';
 
 	this.default_playlist = null;
 
