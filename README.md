@@ -13,7 +13,7 @@ Opensource community driven playlist using Spotify, Mopidy, Node.js and Backbone
 - Simple and elegant group playlist
 - Song Bombs =  3 (configurable) unique votes skips the track and "boos" the player
 - Search keywords or Spotify URI's
-- Play / Pause toggle 
+- Play / Pause toggle
 - Default Playlist (plays when Apollo runs out of songs to play)
 
 ## Get Started
@@ -45,16 +45,24 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
 
     $ cd Apollo-Player
     ```
-2. Install Node dependencies 
+2. Install Node dependencies
     ```
     $ npm install
     ```
-3. Configure Apollo 
+3. Configure Apollo
     1. Create a file called config.js in root directory of Apollo
     ```javascript
     $ touch config.js (or just create it with an editor)
     ```
-    2. add this structure into config.js file:
+    2. Create a [Google Project](https://console.developers.google.com/)
+        1. Create a new Google Project
+        2. Go to the Credentials section under ApIs & Auth.
+        3. Click create new Client ID
+        4. Select Web Application
+            1. Authorized Javascript origins: must match the origin for your requests
+            2. Authorized Redirect URIS: a public facing url or private IP to which google redirect the user during the auth callback (must end in /auth/google/callback)
+
+    3. add this structure into config.js file:
         ```javascript
         var config = {
           development: {
@@ -71,17 +79,10 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
             "bomb_track": "SPOTIFY TRACK TO PLAY ON BOMBING" (optional default is "spotify:track:1JFeNGtkTjiTWgSSz0iHq5")
           }
         };
-        
+
         module.exports = config[process.env.NODE_ENV || 'development'];
         ```
-    3. Setup a [Twitter app](https://apps.twitter.com/) and fill in the twitter consumer key and consumer secret. (required)
-        1. After you've created an app, you'll need to make sure you have these details filled in for authentication to work.
-        2. Application details (Even though your localhost is going to be running on port 3000, just fill in these details exactly to make work)
-            1. Name: can be whatever you want (required)
-            2. Description: can be whatever you want (required)
-            3. Website: http://localhost.com  (required)
-            3. Callback URL: http://localhost.com/auth/twitter/callback  (required)
-            4. Allow this application to be used to Sign in with Twitter: leave unchecked.
+
     4. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
 
 3. Start Apollo
@@ -100,7 +101,7 @@ Finished!
 
 ### Tech used
 
-- Frontend: Backbone, RequireJS, Bootstrap, Handelbars, Jade templating and stylus 
+- Frontend: Backbone, RequireJS, Bootstrap, Handelbars, Jade templating and stylus
 - Backend: Node.js, ExpressJS
 
 ### Help? Bugs?

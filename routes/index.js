@@ -28,9 +28,9 @@ module.exports = function (app,auth,server) {
 	app.get('/test', player.stop);
 
 
-	//twitter auth
-	app.get('/auth/google', auth.passport.authenticate('google'));
-	app.get('/auth/google/return', 
+	//google auth
+	app.get('/auth/google', auth.passport.authenticate('google', { scope:  [ 'profile' ] })); 
+	app.get('/auth/google/callback', 
 	  auth.passport.authenticate('google', { successRedirect: '/player',
 	                                     failureRedirect: '/login' }));
 	
