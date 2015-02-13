@@ -88,6 +88,7 @@ function Player (app,server) {
 						self.emit('player:track:added');
 						cache[_track.uri] = _track;
 						res_json.success(res,_track);
+						self.play();
 					});
 				});
 			}else{
