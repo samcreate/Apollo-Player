@@ -13,14 +13,17 @@ Opensource community driven playlist using Spotify, Mopidy, Node.js and Backbone
 - Simple and elegant group playlist
 - Song Bombs =  3 (configurable) unique votes skips the track and "boos" the player
 - Search keywords or Spotify URI's
+- Support for multiple backends (merged from https://github.com/lemmy/Apollo-Player/)
 - Play / Pause toggle
-- Default Playlist (plays when Apollo runs out of songs to play)
+- Default Playlist (plays when Apollo runs out of songs to play) (optional)
 
 ## Get Started
 
 ### Prerequisites
 1. Don't talk about Fight Club.
-2. You'll need to have a basic understanding of Node and Node's package manager. I'll add that I didn't have a basic understanding of Node at all before this project and used Apollo to help me learn it... So there's hope for you too!
+2. You'll need to have a basic understanding of Node and Node's package manager.
+
+*I'll add that I didn't have a basic understanding of Node at all before this project and used Apollo to help me learn it... So there's hope for you too!*
 
 ### Install and configure Mopidy
 
@@ -50,18 +53,18 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
     $ npm install
     ```
 3. Configure Apollo
-    1. Create a file called config.js in root directory of Apollo
-    ```javascript
-    $ touch config.js (or just create it with an editor)
-    ```
-    2. Create a [Google Project](https://console.developers.google.com/)
+    1. Create a [Google Project](https://console.developers.google.com/)
         1. Create a new Google Project
         2. Go to the Credentials section under ApIs & Auth.
         3. Click create new Client ID
         4. Select Web Application
             1. Authorized Javascript origins: must match the origin for your requests
             2. Authorized Redirect URIS: a public facing url or private IP to which google redirect the user during the auth callback (must end in /auth/google/callback)
+    2. Create a file called config.js in root directory of Apollo
 
+      ```javascript
+      $ touch config.js (or just create it with an editor)
+      ```
     3. add this structure into config.js file:
         ```javascript
         var config = {
@@ -83,7 +86,7 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
         module.exports = config[process.env.NODE_ENV || 'development'];
         ```
 
-    4. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
+    4. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (optional)
 
 3. Start Apollo
     ```javascript
