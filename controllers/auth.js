@@ -1,5 +1,4 @@
 var usersController = require('./usersController');
-var gravatar = require('gravatar');
 
 module.exports = function () {
 	// =================================================
@@ -8,7 +7,7 @@ module.exports = function () {
 	var config,
 		UserController,
 		passport,
-		GoogleStrategy;
+		LocalStrategy;
 
 	// =================================================
 	// = public functions                              =
@@ -20,7 +19,7 @@ module.exports = function () {
 			self.app = p_app;
 			config = require('../config.js');
 			self.passport = passport = require('passport');
-			GoogleStrategy = require('passport-google').Strategy;
+			LocalStrategy = require('passport-local').Strategy;
 			_setup_passport();
 			console.log("AUTH INIT")
 
@@ -33,7 +32,6 @@ module.exports = function () {
 		ensureAuthenticatedHome : function(req, res, next){
 			
 			
-
 			if (req.isAuthenticated()) { res.redirect('/player') }
 				 return next();
   				
@@ -58,30 +56,13 @@ module.exports = function () {
 		passport.deserializeUser(function(user, done) {
 		  done(null, user);
 		});
-		
-		passport.use(new GoogleStrategy({
-		    returnURL: 'http://localhost:3000/auth/google/return',
-    		realm: 'http://localhost:3000/'
-		  },
-		  function(identifier, profile, done) {
-		    // asynchronous verification, for effect...
-		    process.nextTick(function () {
-		      
-		      // To keep the example simple, the user's Google profile is returned to
-		      // represent the logged-in user.  In a typical application, you would want
-		      // to associate the Google account with a user record in your database,
-		      // and return that user instead.
-		      
-		      var profile_photo_url = gravatar.url(profile.emails[0].value, {s: '200'});
-			      profile.profile_photo = profile_photo_url;
-			      profile.identifier = identifier;
+		passport.use(new LocalStrategy(
+		  function(username, password, done) {
 
-			      
-				usersController.findOrCreate(profile,function(profile){
-					return done(null, profile);
-				});
-		      
+		    usersController.findOrCreate(username,function(user){
+		      done(null, user);
 		    });
+
 		  }
 		));
 	}

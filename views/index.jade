@@ -6,11 +6,14 @@ block content
 				div
 					h2.rocket.ir Rocket
 					h1 APOLLO PLAYER
-					form(method="get", action="/auth/google")#login_form
-						button(type="submit")#login LOGIN WITH TWITTER
+					form(role='form', action="/",method="post")#login_form
+						.form-group
+							input.form-control(type='text', name="username", placeholder='Enter your name')
+						.form-group
+							input.form-control(type='hidden', name="password", value="dummy", placeholder='dummy')
+						button.btn.btn-default(type='submit')#login Submit
 		.row
 			.col-lg-12
-				p APOLLO is an opensource social playlist for Mopidy by ARGONAUT.
 		.album_bg
 		.gradient_cover
 			

@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'handlebars',
+  'bootstrap',
   'notification'
-], function($, _, Backbone,Handlebars,Notification) {
+], function($, _, Backbone,Handlebars,bootstrap,Notification) {
   'use strict';
  
   var ProfileView = Backbone.View.extend({

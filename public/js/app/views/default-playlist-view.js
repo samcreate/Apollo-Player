@@ -1,9 +1,8 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
-  'bootstrap'
-], function($, _, Backbone,bootstrap) {
+  'backbone'
+], function($, _, Backbone) {
   'use strict';
 
   var DefaultPlaylistView = Backbone.View.extend({

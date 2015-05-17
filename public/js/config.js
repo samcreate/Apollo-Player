@@ -6,7 +6,7 @@ requirejs.config({
 		backbone: '../vendor/backbone-amd/backbone-min',
 		player: "player",
 		notification: 'notification',
-		bootstrap: "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min" ,
+		bootstrap: "../vendor/bootstrap/dist/js/bootstrap.min",
     },
     shim: {
 	  handlebars: {

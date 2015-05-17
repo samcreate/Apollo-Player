@@ -27,13 +27,12 @@ module.exports = function (app,auth,server) {
 
 	app.get('/test', player.stop);
 
-
-	//twitter auth
-	app.get('/auth/google', auth.passport.authenticate('google'));
-	app.get('/auth/google/return', 
-	  auth.passport.authenticate('google', { successRedirect: '/player',
-	                                     failureRedirect: '/login' }));
-	
+	// local auth
+//	app.get('/', function(req, res){
+//		res.render('login', { user: req.user, message: 'req.user' });
+//	});
+	app.post('/',
+		auth.passport.authenticate('local', { successRedirect: '/player', failureRedirect: '/' }));
 	app.get('/logout', function(req, res){
 	  req.logout();
 	  res.redirect('/');
