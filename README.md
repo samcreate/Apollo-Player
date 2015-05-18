@@ -57,17 +57,17 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
     2. add this structure into config.js file:
         ```javascript
         
-            var config = {
-                server: {
-                    port: 3000,
-                },
-                "default_playlist_uri": "spotify:user:samcreate:playlist:30M46OlqukAmOgXgaJ0ohU",
-                "htmlPretty": "true"
-            };
+	        var config = {
+			    server: {
+			        port: 3000,
+			    },
+			    "default_playlist_uri": "spotify:user:samcreate:playlist:30M46OlqukAmOgXgaJ0ohU",
+			    "htmlPretty": "true"
+			};
 
-            module.exports = config;
-            
-    3. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
+			module.exports = config;
+			
+	3. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
 
 3. Start Apollo
     ```javascript

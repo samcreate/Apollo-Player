@@ -72,7 +72,7 @@ function Player (app,server) {
 		var _track = req.body;
 
 		// attach the name of the user who has added this track
-		_track.by = req.user || "Apollo Player";
+		_track.by = req.user || "???";
 
 		// Try to figure out if this track is already part of the tracklist
 		// If track is already part of tracklist, don't add it.
@@ -283,13 +283,11 @@ function Player (app,server) {
 		console.info('[Player.js]: Online');
 		self.loadDefaultPlayList();
 		self.online = true;
-		self.play(); 
 	}
 
 	this._offline = function(){
 		console.info('[Player.js]: Offline');
 		this.online = false;
-		self.play(); 
 	}
 
 	this._disconnect = function() {
