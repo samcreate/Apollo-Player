@@ -283,11 +283,13 @@ function Player (app,server) {
 		console.info('[Player.js]: Online');
 		self.loadDefaultPlayList();
 		self.online = true;
+		self.play(); 
 	}
 
 	this._offline = function(){
 		console.info('[Player.js]: Offline');
 		this.online = false;
+		self.play(); 
 	}
 
 	this._disconnect = function() {
