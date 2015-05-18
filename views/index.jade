@@ -1,24 +1,20 @@
 extends layout
 block content
-    .container.home
-        .row
-            .col-lg-12.copy
-                div
-                    h2.rocket.ir Rocket
-                    h1 APOLLO PLAYER
-                    form(role='form', action="/",method="post")#login_form.form-inline
-                        .form-group.row.center-block
-                            .input-group.input-group-lg.col-lg-12.username
-                                span#sizing-addon1.input-group-addon @ 
-                                input.form-control(type='text', placeholder='Username', name="username", aria-describedby='sizing-addon1')
-
-                        .form-group
-                            input.form-control(type='hidden', name="password", value="dummy", placeholder='dummy')
-                        .form-group
-                            button.btn.btn-default(type='submit')#login Submit
-        .row
-            .col-lg-12
-        .album_bg
-        .gradient_cover
-            
-        
+	.container.home
+		.row
+			.col-lg-12.copy
+				div
+					h2.rocket.ir Rocket
+					h1 APOLLO PLAYER
+					form(role='form', action="/",method="post")#login_form
+						.form-group
+							input.form-control(type='text', name="username", placeholder='Enter your name')
+						.form-group
+							input.form-control(type='hidden', name="password", value="dummy", placeholder='dummy')
+						button.btn.btn-default(type='submit')#login Submit
+		.row
+			.col-lg-12
+		.album_bg
+		.gradient_cover
+			
+		
