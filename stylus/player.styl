@@ -1,3 +1,18 @@
+
+
+div.perspective:not(.modalview) .album_bg{
+		
+	animation-name: masked-animation;
+	animation-duration: 160s;
+	animation-iteration-count: infinite;
+	transform-origin: 20% 80%;
+	transform: scale(1) rotate(0);
+
+	
+}
+
+
+
 div.container{
 	width:100%;
 	max-width:100%;
@@ -75,12 +90,10 @@ div.container{
 		-moz-filter: grayscale(100%) contrast(14%) brightness(197%);
 		opacity:0.9;
 
-		animation-name: masked-animation;
-		animation-duration: 160s;
-		animation-iteration-count: infinite;
-		transform-origin: 20% 80%;
-		transform: scale(1) rotate(0);
+		
 	}
+	
+	
 
 	.gradient_cover{
 		height:100%;
@@ -305,7 +318,7 @@ div.container{
 						margin:0px;
 						-webkit-font-smoothing: antialiased;
 						dd{float:left; display:inline-block; color:rgba(0, 0, 0, .35);font-family: 'latolight';font-weight: bold; text-overflow: ellipsis;
-							white-space: nowrap; overflow:hidden; width:60%;}
+							white-space: nowrap; overflow:hidden; width:60%; text-transform: capitalize;}
 						dt{ float:left;display:inline; clear:left; margin-right:5px; color:black;font-weight: bold;}
 					}
 				}
@@ -388,7 +401,7 @@ div.container{
 			dl{
 					margin:0px;
 					dd{float:left; display:inline; padding-left: 5px;
-padding-top: 2px; color: rgba(255, 255, 255, .45);}
+padding-top: 2px; color: rgba(255, 255, 255, .45); text-transform: capitalize;}
 					dt{ float:left;display:inline; clear:left; margin-right:5px; color:white;}
 				}
 
