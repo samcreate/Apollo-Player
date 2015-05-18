@@ -56,31 +56,18 @@ Now that you have Mopidy up and running, let's setup up Apollo as our Frontend f
     ```
     2. add this structure into config.js file:
         ```javascript
-        var config = {
-          development: {
-            server: {
-              host: "localhost",
-              port: 3000,
-            },
-            "twitter_callback":"http://localhost:3000/auth/twitter/callback",
-            "consumerKey":"YOUR TWITTER CONSUMER KEY",
-            "consumerSecret":"YOUR TWITTER SECRET",
-            "default_playlist_uri":"SPOTIFY URI TO DEFAULT PLAY LIST (cannot be private!)",
-            "htmlPretty": "true"
-          }
-        };
         
-        module.exports = config[process.env.NODE_ENV || 'development'];
-        ```
-    3. Setup a [Twitter app](https://apps.twitter.com/) and fill in the twitter consumer key and consumer secret. (required)
-        1. After you've created an app, you'll need to make sure you have these details filled in for authentication to work.
-        2. Application details (Even though your localhost is going to be running on port 3000, just fill in these details exactly to make work)
-            1. Name: can be whatever you want (required)
-            2. Description: can be whatever you want (required)
-            3. Website: http://localhost.com  (required)
-            3. Callback URL: http://localhost.com/auth/twitter/callback  (required)
-            4. Allow this application to be used to Sign in with Twitter: leave unchecked.
-    4. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
+            var config = {
+                server: {
+                    port: 3000,
+                },
+                "default_playlist_uri": "spotify:user:samcreate:playlist:30M46OlqukAmOgXgaJ0ohU",
+                "htmlPretty": "true"
+            };
+
+            module.exports = config;
+            
+    3. Add your Spotify default playlist uri (this has to be a public playlist to work). This is what plays when all the songs in the queue have finished playing (required)
 
 3. Start Apollo
     ```javascript
@@ -93,6 +80,7 @@ Optionally on Debian/Ubuntu, you might want to start Apollo as a system [service
 
 Finished!
 
+-
 ### Notes
 
 - If you change a value in config.js, you'll need to restart node (ctrl+c)
