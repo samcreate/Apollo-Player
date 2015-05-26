@@ -285,7 +285,11 @@ function Player(app, server) {
 
         self.mopidy.playback.getCurrentTlTrack().then(function(tl_track) {
             if (tl_track == null) {
-                this._playOneFromDefault();
+            	if (self.default_playlist.length == 1) {
+		            console.log("No more tracks in default playlist available, re-initializing list");
+		            self.loadDefaultPlayList();
+		        }
+		        self._playOneFromDefault();
             }
         });
     }
@@ -297,10 +301,7 @@ function Player(app, server) {
         // If there is just a single element left in the playlist, refill it.
         // This has the minimal chance of a race condition when the last track immediately ends
         // (e.g. unplayable/bombed/...) before loadDefaultPlayList finished.
-        if (self.default_playlist.length == 1) {
-            console.log("No more tracks in default playlist available, re-initializing list");
-            self.loadDefaultPlayList();
-        }
+
         self.mopidy.library.lookup(track.uri).then(function(track) {
             self.mopidy.tracklist.add(track).then(function(addedTracks) {
                 self.mopidy.playback.play(addedTracks[0]);
@@ -351,9 +352,9 @@ function Player(app, server) {
                 //console.log('Cache miss for: ', cacheHit);
                 // it does not have a user object associated
                 cacheHit.by = {
-                    name: "???",
+                    name: "Apollo",
                     id: "???",
-                    username: "???"
+                    username: "Apollo"
                 };
                 // nor has it cover artwork
                 self.util.getArt(cacheHit, callback);
